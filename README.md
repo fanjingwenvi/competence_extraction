@@ -1,1 +1,5 @@
-# competence_extraction
+# Competence Extraction
+
+Web Frontend 
+
+![webpage](img/webpage.png)
