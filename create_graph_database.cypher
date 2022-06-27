@@ -19,5 +19,7 @@ WITH cs,
 [x IN cs._children WHERE x._type="CS_DESC_LONG" | x._text] as descr,
 [x IN cs._children WHERE x._type="CS_ID" | x._text] as cid
 MERGE (c:Course{cid:cid[0]})
-SET c.Name=name[0],
+SET c.name=name[0],
 c.descr = descr[0] ;
+
+// name 
