@@ -22,4 +22,4 @@ MERGE (c:Course{cid:cid[0]})
 SET c.name=name[0],
 c.descr = descr[0] ;
 
-// name 
+// MATCH (n) RETURN n
