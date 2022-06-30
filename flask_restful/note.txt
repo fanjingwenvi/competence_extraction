@@ -6,5 +6,6 @@ source venv/bin/activate
 pip install Flask
 pip install flask-restful
 
-export FLASK_APP=app.py
-flask run
+## FLASK_APP=api.py
+export FLASK_APP=api.py
+## flask run
