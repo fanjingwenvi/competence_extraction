@@ -1,23 +1,16 @@
-from flask import Flask
-from flask_restful import Resource, Api
-from neo4j import GraphDatabase, basic_auth
+from flask import Flask,request,render_template,redirect
+# from flask_restful import Resource, Api
+
+from neo4j import GraphDatabase
 
 from dotenv import load_dotenv, find_dotenv
 import os 
 import ast
 
 app = Flask(__name__)
-api = Api(app)
+## api = Api(app)
 
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
-
-api.add_resource(HelloWorld, '/')
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
+## find the environment variable 
 load_dotenv(find_dotenv())
 
 def env(key, default=None, required=True):
@@ -35,10 +28,25 @@ def env(key, default=None, required=True):
             return default
         raise RuntimeError("Missing required environment variable '%s'" % key)
 
+## app.config['SECRET_KEY'] = env('SECRET_KEY')
+
 DATABASE_USERNAME = env('DATABASE_USERNAME')
 DATABASE_PASSWORD = env('DATABASE_PASSWORD')
 DATABASE_URL = env('DATABASE_URL')
 
-driver = GraphDatabase.driver(DATABASE_URL, auth=basic_auth(DATABASE_USERNAME, str(DATABASE_PASSWORD)))
+print(DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_URL)
 
-## app.config['SECRET_KEY'] = env('SECRET_KEY')
+driver = GraphDatabase.driver(uri=DATABASE_URL, auth=(DATABASE_USERNAME, DATABASE_PASSWORD))
+session = driver.session()
+
+@app.route("/display",methods=["GET","POST"])
+def display_node():
+    q1="""
+    match (n) return n
+    """
+    results=session.run(q1)
+    data=results.data()
+    return(jsonify(data))
+
+if __name__=='__main__':
+    app.run(port=5000)

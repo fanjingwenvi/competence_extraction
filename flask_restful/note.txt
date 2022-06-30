@@ -5,7 +5,18 @@ source venv/bin/activate
 ## pip3 install -r requirements.txt
 pip install Flask
 pip install flask-restful
+python --version 
+python3 -m pip install neo4j
+pip install python-dotenv
+pip install py2neo
 
 ## FLASK_APP=api.py
-export FLASK_APP=api.py
+FLASK_APP=demo.py
 ## flask run
+export FLASK_APP=api.py
+printenv FLASK_APP
+
+## requirements
+
+## ref 
+.env https://able.bio/rhett/how-to-set-and-get-environment-variables-in-python--274rgt5
