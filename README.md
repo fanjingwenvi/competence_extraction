@@ -1,5 +1,2 @@
-# Competence Extraction
+# Competence Extraction With Machine Learning / Natural Language Processing 
 
-Web Frontend 
-
-![webpage](img/webpage.png)
