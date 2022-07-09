@@ -1,14 +1,19 @@
 ## run the api 
 source venv/bin/activate
+pip install -r requirements.txt ## intall the packages 
 hypercorn main:app
 http://127.0.0.1:8000/docs
 
-## create venv
+## venv
 python3 -m venv venv
 pip install neo4j
 pip install python-dotenv
 pip install fastapi
 pip install hypercorn
+pip freeze > requirements.txt
+Ctrl + Shift + P  Terminal: Create New Integrated Terminal
+python.terminal.activateEnvironment": true
+
 
 
 
