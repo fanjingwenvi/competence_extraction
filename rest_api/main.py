@@ -8,6 +8,10 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 ## from fastapi import APIRouter
 
+import asyncio
+from hypercorn.config import Config
+from hypercorn.asyncio import serve
+
 load_dotenv(find_dotenv())
 
 def env(key, default=None, required=True):
@@ -54,6 +58,13 @@ RETURN Competence.name, Course.name, Course.descr
     results=session.run(q1)
     data=results.data()
     return(jsonable_encoder(data))
+
+if __name__ == '__main__': 
+## main setting 
+    config = Config()
+    ## config.bind = ["localhost:8000"]
+    ## default port 
+    asyncio.run(serve(app, config))
      
 
 
