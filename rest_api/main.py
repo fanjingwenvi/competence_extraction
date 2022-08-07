@@ -1,16 +1,12 @@
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
+from fastapi import APIRouter
+
 from dotenv import load_dotenv, find_dotenv
 import os 
 import ast
 
 from neo4j import GraphDatabase
-
-from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
-## from fastapi import APIRouter
-
-import asyncio
-from hypercorn.config import Config
-from hypercorn.asyncio import serve
 
 load_dotenv(find_dotenv())
 
@@ -39,33 +35,39 @@ session = driver.session()
 
 app = FastAPI()
 
-@app.get("/related_competences/{course_name}") 
+@app.get("/related_competence_by_str/{course_name}") 
 def search(course_name):
+  if len(course_name) < 3:
     q1=f"""
-    MATCH (Course WHERE Course.name CONTAINS '{course_name}')-[:Annotate]—(Competence)
-RETURN Course.name, Competence.name, Competence.uri 
+    MATCH (course:Course WHERE toLower(course.name) = toLower('{course_name}'))-[:RELATED_TO]—(competency:Competency)
+RETURN course.name, competency.name, competency.uri
     """
-    results=session.run(q1)
-    data=results.data()
-    return(jsonable_encoder(data))
-
-@app.get("/related_courses/{competence_name}") 
-def search(competence_name):
+    # return {"Warning": "Please type at least 3 characters."}
+  else:
     q1=f"""
-    MATCH (Competence WHERE Competence.name CONTAINS '{competence_name}')-[:Annotate]—(Course)
-RETURN Competence.name, Course.name, Course.descr
+    MATCH (course:Course WHERE toLower(course.name) CONTAINS toLower('{course_name}'))-[:RELATED_TO]—(competency:Competency)
+RETURN course.name, competency.name, competency.uri
     """
-    results=session.run(q1)
-    data=results.data()
-    return(jsonable_encoder(data))
+  results=session.run(q1)
+  data=results.data()
+  return(jsonable_encoder(data))
 
-if __name__ == '__main__': 
-## main setting 
-    config = Config()
-    ## config.bind = ["localhost:8000"]
-    ## default port 
-    asyncio.run(serve(app, config))
+@app.get("/related_courses_by_str/{competence_name}") 
+def search(competency_name):
+  if len(competency_name) < 3:
+    q1=f"""
+    MATCH (competency:Competency WHERE toLower(competency.name) = toLower('{competency_name}'))-[:RELATED_TO]—(course:Course)
+RETURN competency.name, course.name, course.description 
+    """
+    # return {"Warning": "Please type at least 3 characters."}
+  else:
+    q1=f"""
+    MATCH (competency:Competency WHERE toLower(competency.name) CONTAINS toLower('{competency_name}'))-[:RELATED_TO]—(course:Course)
+RETURN competency.name, course.name, course.description 
+    """
+  results=session.run(q1)
+  data=results.data()
+  return(jsonable_encoder(data))
+
+
      
-
-
-
