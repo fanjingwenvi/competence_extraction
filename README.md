@@ -87,7 +87,7 @@ jupyter notebook
 
 open nlp_service.ipynb file, choose the kernel awt2022 on jupyter notebook, and run <br>
 
-# 5. Setup graph database local desktop 
+## 5. Setup graph database local desktop 
 
 open neo4j desktop, add new Project, add local Graph DBMS, set Password = awt2022, start local Graph DBMS, install APOC plugin<br>
 
@@ -104,14 +104,14 @@ dbms.memory.pagecache.size=2G
 
 put the the output relations folder, skills_de.csv file, course_description_FOKUS.xml file on the neo4j desktop Open folder - Import to prepare for importing <br>
 
-# 6. Run graph database driver service 
+## 6. Run graph database driver service 
 
 same venv as 4. Run nlp service<br>
 
 open  graph_database_driver.ipynb , choose the kernel awt2022 on jupyter notebook, and run <br>
 
 
-# 7. Setup graph database cloud service  
+## 7. Setup graph database cloud service  
 
 get the dump file from neo4j local Graph DBMS<br>
 
