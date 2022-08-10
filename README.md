@@ -24,20 +24,20 @@ bash
 ```
 competency_extraction
 │
-└───rest_api 
-│   │───main.py
-│   │───.env 
-│   │───requirements.txt
-│───nlp_service.ipynb
-│───graph_database_driver.ipynb 
-└───data 
-│   │───connector.txt
-│   │───skills_de.csv
-│   │───course_description_FOKUS.xml 
-│   │───ccourse_description_testset.xml
-│───requirements.txt
-│───LICENSE
-│───README.md
+└── rest_api 
+│   │── main.py
+│   │── .env 
+│   │── requirements.txt
+│── nlp_service.ipynb
+│── graph_database_driver.ipynb 
+└── data 
+│   │── connector.txt
+│   │── skills_de.csv
+│   │── course_description_FOKUS.xml 
+│   │── course_description_testset.xml
+│── requirements.txt
+│── LICENSE
+│── README.md
 ```
 
 ## 3. MAIN PROGRAM: Run rest api service with cloud graph databse 
