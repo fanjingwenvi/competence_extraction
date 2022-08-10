@@ -20,17 +20,16 @@ query/filter Course (Course-descriptions) by Competenc(y/ies)
 
 
 ## 2. Folder Structure 
-bash 
-```
-competency_extraction
-│
-└── rest_api 
+
+```bash 
+
+│── rest_api 
 │   │── main.py
 │   │── .env 
 │   │── requirements.txt
 │── nlp_service.ipynb
 │── graph_database_driver.ipynb 
-└── data 
+│── data 
 │   │── connector.txt
 │   │── skills_de.csv
 │   │── course_description_FOKUS.xml 
