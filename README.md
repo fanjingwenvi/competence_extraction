@@ -56,6 +56,7 @@ hypercorn main:app
 
 click the folloing link to see documentation of the FastAPI<br>
 <http://127.0.0.1:8000/docs><br>
+## http://127.0.0.1/docs
 
 For security resaon, the neo4j databae environment variables are stored in the .env file. They are connected to the neo4j cloud neo4j databae by default. They can be changed as following to connect to local desktop neo4j databae. <br>
 

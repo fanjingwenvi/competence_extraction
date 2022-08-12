@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  neo4j:
+    image: neo4j:4.4.10
+    ports:
+    - "7474:7474"
+    - "7687:7687"
+    volumes:
+      - ./neo4j/data:/data
+      - ./neo4j/logs:/logs
+      - ./neo4j/import:/import
+    environment:
+      ## set the Inital NEO4J_AUTH only, they can be changed on the neo4j browser 
+      - NEO4J_AUTH=neo4j/awt2022
+      ## add and activate plugin  apoc 
+      - NEO4JLABS_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      ## enable xml data import 
+      - NEO4J_apoc_import_file_enabled=true
+      ## configurate memory setting 
+      ## docker logs
+ ##     - NEO4J_dbms_memory_heap_initial_size=2G
+ ##     - NEO4J_dbms_memory_heap_max_size=2G
+ ##     - NEO4J_dbms_memory_pagecache_size=4G
+  fast_api :
+    build: ./fast_api  
+    # volumes:
+    #    - ./fast_api/code: /code 
+    ports:
+    - "80:80"
+    depends_on:
+      - neo4j
+    environment:
+      DATABASE_USERNAME: neo4j
+      DATABASE_PASSWORD: awt2022
+      DATABASE_URL: bolt://neo4j:7687
+      
+#    env_file:
+#      - ./fast_api/.env
+
+# http://localhost:7474/browser/#
+
+## https://neo4j.com/labs/kafka/4.0/docker/
+## config https://neo4j.com/docs/operations-manual/current/docker/operations/
+
+## http://localhost:7474
+# http://127.0.0.1/docs
+## docker compose up -d
+## docker compose down
+## docker ps -a
+## check how to look into neo4j config 
