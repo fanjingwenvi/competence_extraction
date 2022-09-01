@@ -1,128 +1,90 @@
-## 1. Intro 
+# Learning Technologies - Competence Extraction via ML / NLP
 
-### nlp service:
-extracts Competencies from Course-description
-output Relationship(Path) between the Course-description and each of the extracted Competency
+## 1. Introduction
 
-### graph database local setup 
-Setup a graph database on local desktop 
+### NLP Service
 
-### graph database driver service 
-import Course-descriptions and Competencies in the graph database
-import Relationship(Path) in the graph database
+- extracts Competencies from Course-description
+- output Relationship (Path) between the Course-description and each of the extracted Competency
 
-### graph database cloud setup 
-push the local graph database with data to cloud 
+### RESTful API Service with Graph Database
 
-### rest api service: 
-get all Competencies covered by a Course, the list of competencies will be either in ESCO or W3C Verifiable Credentials (VC) dataformat.
-query/filter Course (Course-descriptions) by Competenc(y/ies)
+- get all Competencies covered by a Course, the list of competencies will be either in ESCO dataformat.
+- query/filter Course (Course-descriptions) by Competenc(y/ies)
 
+## 2. Folder Structure
 
-## 2. Folder Structure 
-
-```bash 
-
-│── rest_api 
+```
+│── fast_api
 │   │── main.py
-│   │── .env 
 │   │── requirements.txt
-│── nlp_service.ipynb
-│── graph_database_driver.ipynb 
-│── data 
-│   │── connector.txt
-│   │── skills_de.csv
-│   │── course_description_FOKUS.xml 
-│   │── course_description_testset.xml
-│── requirements.txt
+│   │── Dockerfile
+│── neo4j
+│   │── Cypher.md
+│   │── data
+│   │── import
+│   │── logs
+│── nlp_service
+│   │── main.ipynb
+│   │── Dockerfile
+│   │── data
 │── LICENSE
 │── README.md
 ```
 
-## 3. MAIN PROGRAM: Run rest api service with cloud graph databse 
+## 3. MAIN PROGRAM: Run REST-API Service with Graph Database
 
-run the following command to open the rest_api service sub folder, create the virtual environment, install dependencies, start FastAPI webserver.<br>
+run the following command in root folder competence_extraction to run Fast-API and Neo4J Database
+
 ```bash
-cd competency_extraction/rest_api
-
-python3 -m venv venv
-
-source venv/bin/activate
-
-pip3 install -r requirements.txt
-
-hypercorn main:app
+docker-compose up -d
 ```
 
-click the folloing link to see documentation of the FastAPI<br>
-<http://127.0.0.1:8000/docs><br>
-## http://127.0.0.1/docs
+click the following link to see the documentation of the FastAPI
+<http://127.0.0.1/docs>
 
-For security resaon, the neo4j databae environment variables are stored in the .env file. They are connected to the neo4j cloud neo4j databae by default. They can be changed as following to connect to local desktop neo4j databae. <br>
+click the following link to use neo4j-Browser
+<http://localhost:7474>
+(Username: neo4j)
+(Password: awt2022)
+You can see Cypher queries in _Cypher.md_ for data importing.
 
+stop the docker containers
+
+```docker
+docker compose down
 ```
-DATABASE_USERNAME="neo4j"
-DATABASE_PASSWORD="awt2022"
-DATABASE_URL="bolt://localhost:7687"
-```
 
-## 4. Run nlp service 
+## 4. Run NLP Service
 
-run the following command to open the main folder, create the virtual environment, install dependencies, create ipykernel with name=awt2022, 
-start jupyter notebook.<br>
+### 4.1 Docker configuration
+
+Since default memory setting cannot satisfied our nlp service running requirements, please increase memory of Docker containers to at least 8G:
+go to Preferences > Resource/Advanced > Memory
+
+### 4.2 Run the Service
+
+run the following command in subfolder competence_extraction/nlp_service to extract competencies in Jupyter Notebook
+
+- build up the nlp service image based on Jupyter Notebook
+
 ```bash
-cd competency_extraction
-
-python3 -m venv venv
-
-source venv/bin/activate
-
-pip3 install -r requirements.txt
-
-python3 -m ipykernel install --user --name=awt2022
-
-jupyter notebook
-
+docker build -t mysharednotebook .
 ```
-<br>
 
-open nlp_service.ipynb file, choose the kernel awt2022 on jupyter notebook, and run <br>
+- run the nlp service
 
-## 5. Setup graph database local desktop 
-
-open neo4j desktop, add new Project, add local Graph DBMS, set Password = awt2022, start local Graph DBMS, install APOC plugin<br>
-
-put the following variables on the end of the neo4j Graph DBMS seetings file to unrestricte APOC plugin, enable file import function, and expand dbms memory<br>
-```
-dbms.security.procedures.unrestricted=apoc.*
-apoc.import.file.enabled=true
-
-dbms.memory.heap.initial_size=2G
-dbms.memory.heap.max_size=4G
-dbms.memory.pagecache.size=2G
-```
-<br>
-
-put the the output relations folder, skills_de.csv file, course_description_FOKUS.xml file on the neo4j desktop Open folder - Import to prepare for importing <br>
-
-## 6. Run graph database driver service 
-
-same venv as 4. Run nlp service<br>
-
-open  graph_database_driver.ipynb , choose the kernel awt2022 on jupyter notebook, and run <br>
-
-
-## 7. Setup graph database cloud service  
-
-get the dump file from neo4j local Graph DBMS<br>
-
-install neo4j on local machine, for mac, it is<br>
 ```bash
-brew install neo4j
+docker run -it -p 8888:8888 -v $PWD/output:/output mysharednotebook
 ```
 
-push the neo4j dump file to the neo4j cloud<br>
+- You can find the URLs with a token around the end of the outputs. Use cmd+click to open the last URL in a browser.
+
+- Open the file main.ipynb to run the NLP service.
+
+- If you encounter "Persmission denied" / "Forbidden" Error when opening the main.ipynb file, try:
+
 ```bash
-/usr/local/opt/neo4j/bin/neo4j-admin push-to-cloud  --bolt-uri=bolt-uri  --dump=dump-file-path --username=neo4j  --password=password --overwrite=true 
+docker run -it -p 8888:8888  -v $PWD/output:/output  fanjingwenvi/mysharednotebook:1.0
 ```
 

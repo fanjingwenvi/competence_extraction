@@ -18,6 +18,7 @@ sniffio==1.2.0
 starlette==0.19.1
 toml==0.10.2
 typing_extensions==4.3.0
+uvicorn>=0.15.0,<0.16.0
 uvloop==0.16.0
 watchfiles==0.15.0
 websockets==10.3
